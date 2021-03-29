@@ -8,15 +8,24 @@ public class TiroController : MonoBehaviour
     public float velocidade = 15;
 
     // Start is called before the first frame update
-    void Start()
+    void OnEnable()
     {
         fisica = GetComponent<Rigidbody2D>();
-        Destroy(gameObject,2);
+        Invoke(nameof(Desativar), 2);
+    }
+    void OnDisable()
+    {
+        CancelInvoke();
     }
 
     // Update is called once per frame
     void Update()
     {
         fisica.velocity = new Vector2(0, velocidade);
+    }
+
+    void Desativar()
+    {
+        gameObject.SetActive(false);
     }
 }

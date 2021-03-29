@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class NaveAtira : MonoBehaviour
 {
-    public GameObject tiro;
+    public Pooling poolingDoTiro;
 
     public float cadencia = 0.3f;
 
@@ -30,6 +30,11 @@ public class NaveAtira : MonoBehaviour
 
     void Atirar()
     {
-        Instantiate(tiro, transform.position, transform.rotation);
+        GameObject novoTiro = poolingDoTiro.PegaObjeto();
+        if(novoTiro != null)
+        {
+            novoTiro.transform.position = transform.position;
+            novoTiro.SetActive(true);
+        }
     }
 }
