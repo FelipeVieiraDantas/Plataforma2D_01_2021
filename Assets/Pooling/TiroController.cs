@@ -7,6 +7,8 @@ public class TiroController : MonoBehaviour
     Rigidbody2D fisica;
     public float velocidade = 15;
 
+    public GameObject quemAtirou;
+
     // Start is called before the first frame update
     void OnEnable()
     {
@@ -27,5 +29,13 @@ public class TiroController : MonoBehaviour
     void Desativar()
     {
         gameObject.SetActive(false);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (quemAtirou != collision.gameObject && !collision.gameObject.CompareTag("Finish"))
+        {
+            Destroy(collision.gameObject);
+        }
     }
 }

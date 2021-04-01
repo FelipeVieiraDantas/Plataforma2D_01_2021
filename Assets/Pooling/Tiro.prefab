@@ -14,8 +14,8 @@ GameObject:
   - component: {fileID: 5947616797389031027}
   - component: {fileID: 5947616797389031026}
   m_Layer: 0
-  m_Name: laserBlue01
-  m_TagString: Untagged
+  m_Name: Tiro
+  m_TagString: Finish
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -119,6 +119,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   velocidade: 15
+  quemAtirou: {fileID: 0}
 --- !u!61 &5947616797389031026
 BoxCollider2D:
   m_ObjectHideFlags: 0

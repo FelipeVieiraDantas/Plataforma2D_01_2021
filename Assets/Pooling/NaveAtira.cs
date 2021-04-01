@@ -35,6 +35,10 @@ public class NaveAtira : MonoBehaviour
         {
             novoTiro.transform.position = transform.position;
             novoTiro.SetActive(true);
+
+            TiroController scriptDoTiro = novoTiro.GetComponent<TiroController>();
+            scriptDoTiro.velocidade = Mathf.Abs(scriptDoTiro.velocidade);
+            scriptDoTiro.quemAtirou = gameObject;
         }
     }
 }
