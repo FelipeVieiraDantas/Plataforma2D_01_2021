@@ -9,11 +9,14 @@ public class TiroController : MonoBehaviour
 
     public GameObject quemAtirou;
 
+    public GameObject explosaoPrefab;
+
     // Start is called before the first frame update
     void OnEnable()
     {
         fisica = GetComponent<Rigidbody2D>();
         Invoke(nameof(Desativar), 2);
+        GetComponent<AudioSource>().Play();
     }
     void OnDisable()
     {
@@ -36,6 +39,8 @@ public class TiroController : MonoBehaviour
         if (quemAtirou != collision.gameObject && !collision.gameObject.CompareTag("Finish"))
         {
             Destroy(collision.gameObject);
+            GameObject explosao = Instantiate(explosaoPrefab, collision.transform.position, collision.transform.rotation);
+            Destroy(explosao, 2);
         }
     }
 }
