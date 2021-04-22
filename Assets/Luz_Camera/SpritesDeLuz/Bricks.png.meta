@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 2cbb88c123ba1e34ea72c7a7ab7260e1
+guid: f7a049b91b53682478f60fe8af8e036b
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -46,7 +46,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 16
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -100,7 +100,7 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures:
-    - texture: {fileID: 2800000, guid: 4103de1072b0faf41885490500c0de4a, type: 3}
+    - texture: {fileID: 2800000, guid: 801dfd32f991a05449e6b29e0a461339, type: 3}
       name: _NormalMap
   spritePackingTag: 
   pSDRemoveMatte: 0
