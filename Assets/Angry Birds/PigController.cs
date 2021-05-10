@@ -33,6 +33,8 @@ public class PigController : MonoBehaviour
                     Destroy(gameObject);
                     GameObject explosaoCriada = Instantiate(explosaoPrefab, transform.position, transform.rotation);
                     Destroy(explosaoCriada, 1);
+
+                    Pontuacao.singleton.AdicionaPonto();
                 }else if (hp<= maxHP/2) 
                 {
                     spriteRenderer.sprite = machucado;

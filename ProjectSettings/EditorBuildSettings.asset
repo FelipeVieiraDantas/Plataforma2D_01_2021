@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Angry Birds/angryFake.unity
     guid: ff3fb22f1ffd82e418a6edf1f83ba444
+  - enabled: 1
+    path: Assets/Angry Birds/angryFake2.unity
+    guid: 5f8f304acde8e654f857c794f090a658
   m_configObjects: {}
