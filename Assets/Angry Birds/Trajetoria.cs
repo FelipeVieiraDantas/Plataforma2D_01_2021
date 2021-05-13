@@ -20,9 +20,15 @@ public class Trajetoria : MonoBehaviour
     List<GameObject> bolinhasCriadas;
     int ultimaBola;
 
+
+    AngryFake scriptDoPassaro;
+
     // Start is called before the first frame update
     void Start()
     {
+        //Pegar o script do pássaro
+        scriptDoPassaro = GetComponent<AngryFake>();
+
         //Criar um elástico falso
         elasticoFalso = elastico.gameObject.AddComponent<SpringJoint2D>();
         elasticoFalso.connectedBody = passaroFalso;
@@ -42,6 +48,11 @@ public class Trajetoria : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!scriptDoPassaro.minhaVez)
+        {
+            return;
+        }
+
         //Verificar se o pássaro real se moveu, e então recalcular a rota
         if(transform.position != ultimaPosicao)
         {

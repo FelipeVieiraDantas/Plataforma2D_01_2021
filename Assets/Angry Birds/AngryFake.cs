@@ -16,6 +16,8 @@ public class AngryFake : MonoBehaviour
 
     PigController[] porcosNaCena;
 
+    public bool minhaVez;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -24,8 +26,14 @@ public class AngryFake : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    protected virtual void Update()
     {
+        if (!minhaVez)
+        {
+            return;
+        }
+
+
         bool existePorcoVivo = false;
         for (int i = 0; i < porcosNaCena.Length; i++)
         {
@@ -83,18 +91,35 @@ public class AngryFake : MonoBehaviour
 
     void OnMouseDown()
     {
+        if (!minhaVez)
+        {
+            return;
+        }
+
         estouClicando = true;
     }
 
     void OnMouseUp()
     {
+        if (!minhaVez)
+        {
+            return;
+        }
+
         estouClicando = false;
         fisica.isKinematic = false;
     }
 
-    void ReiniciarFase()
+    protected void ReiniciarFase()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        if (!minhaVez)
+        {
+            return;
+        }
+
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        minhaVez = false;
+        BirdManager.singleton.VerificaPassaro();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
