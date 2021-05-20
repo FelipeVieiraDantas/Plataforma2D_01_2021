@@ -2,11 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum Direcao
+{
+    Direita = 1, Esquerda = -1, Cima, Baixo, Nenhum
+}
+
 public class HollowController : MonoBehaviour
 {
     [Header("Movimento")]
     public float velocidade = 5;
     Rigidbody2D fisica;
+    public Direcao ultimaDirHorizontal;
+    public Direcao ultimaDirVertical = Direcao.Nenhum;
+
 
     [Header("Pulo")]
     public float forcaPulo = 200;
@@ -96,11 +104,34 @@ public class HollowController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.LeftShift) && !jaDeuDash)
         {
             fisica.velocity = Vector2.zero;
-            fisica.AddForce(new Vector2(inputDoJogador * forcaDash, 0), ForceMode2D.Impulse);
+            fisica.AddForce(new Vector2((int)ultimaDirHorizontal * forcaDash, 0), ForceMode2D.Impulse);
             fisica.gravityScale = 0;
             estouDashando = true;
             jaDeuDash = true;
         }
+
+
+        //Setar últimos valores apertados
+        if(inputDoJogador < 0)
+        {
+            ultimaDirHorizontal = Direcao.Esquerda;
+        }else if(inputDoJogador > 0)
+        {
+            ultimaDirHorizontal = Direcao.Direita;
+        }
+        float inputVertical = Input.GetAxis("Vertical");
+        if(inputVertical < 0)
+        {
+            ultimaDirVertical = Direcao.Baixo;
+        }else if(inputVertical > 0)
+        {
+            ultimaDirVertical = Direcao.Cima;
+        }
+        else
+        {
+            ultimaDirVertical = Direcao.Nenhum;
+        }
+
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -114,6 +145,11 @@ public class HollowController : MonoBehaviour
 
             Vector2 forcaAdicionada = -direcao;
             forcaAdicionada.y = 1;
+
+            //MOSTRAR NA AULA DE SEGUNDA
+            //fisica.velocity = Vector2.zero;
+            //jaDeuDash = false;
+            //fisica.velocity = 1;
 
             fisica.AddForce(forcaAdicionada * forcaKnockBack,ForceMode2D.Impulse);
             estouComKnockBack = true;
