@@ -4,9 +4,9 @@ using UnityEngine;
 
 public enum Direcao
 {
-    Direita = 1, Esquerda = -1, Cima, Baixo, Nenhum
+    Direita = 1, Esquerda = -1, Cima = 2, Baixo = -2, Nenhum = 0
 }
-
+//INTERVALO! Voltamos 9:55!
 public class HollowController : MonoBehaviour
 {
     [Header("Movimento")]
@@ -38,11 +38,14 @@ public class HollowController : MonoBehaviour
     bool estouComKnockBack;
     public float forcaKnockBack = 10;
 
+    Animator anim;
+
     // Start is called before the first frame update
     void Start()
     {
         fisica = GetComponent<Rigidbody2D>();
         scriptDoDano = GetComponent<Mortal>();
+        anim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -132,6 +135,9 @@ public class HollowController : MonoBehaviour
             ultimaDirVertical = Direcao.Nenhum;
         }
 
+
+        //Colocar o input na animação
+        anim.SetFloat("InputVertical", inputVertical);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -146,10 +152,10 @@ public class HollowController : MonoBehaviour
             Vector2 forcaAdicionada = -direcao;
             forcaAdicionada.y = 1;
 
-            //MOSTRAR NA AULA DE SEGUNDA
-            //fisica.velocity = Vector2.zero;
-            //jaDeuDash = false;
-            //fisica.velocity = 1;
+            //Cancelar dash se tomar dano
+            fisica.velocity = Vector2.zero;
+            jaDeuDash = false;
+            fisica.gravityScale = 1;
 
             fisica.AddForce(forcaAdicionada * forcaKnockBack,ForceMode2D.Impulse);
             estouComKnockBack = true;

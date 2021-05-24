@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class HollowAttack : MonoBehaviour
 {
-    public Transform posAtaque;
+    public Transform posAtaque_esquerda, posAtaque_direita, posAtaque_cima, posAtaque_baixo;
     public float raioAtaque = 0.5f;
     public int quantidadeDeDano = 1;
+    HollowController hollowController;
 
     [Header("Knockback Inimigo")]
     public float forcaKnockbackInimigo = 10;
@@ -15,12 +16,13 @@ public class HollowAttack : MonoBehaviour
     public float tempoDeAtaque = 0.5f;
     float contadorTempoAtaque;
 
-    
+    [Header("Efeitos")]
+    public ParticleSystem efeitoAtaque;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        hollowController = GetComponent<HollowController>();
     }
 
     // Update is called once per frame
@@ -35,6 +37,30 @@ public class HollowAttack : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.X) || Input.GetMouseButtonDown(0))
         {
+            //Descobrir qual direção é pra atacar
+            Transform posAtaque = posAtaque_direita;
+            if(hollowController.ultimaDirHorizontal == Direcao.Esquerda)
+            {
+                posAtaque = posAtaque_esquerda;
+            }
+            if(hollowController.ultimaDirVertical != Direcao.Nenhum)
+            {
+                posAtaque = posAtaque_cima;
+                if(hollowController.ultimaDirVertical == Direcao.Baixo)
+                {
+                    posAtaque = posAtaque_baixo;
+                }
+            }
+
+
+            //Colocar a partícula na posição do ataque
+            efeitoAtaque.transform.position = posAtaque.position;
+            efeitoAtaque.transform.rotation = posAtaque.rotation;
+            //Resetar a partícula se já estiver tocando
+            efeitoAtaque.Clear();
+            //Tocar a partícula
+            efeitoAtaque.Play();
+
             Collider2D[] bati = Physics2D.OverlapCircleAll(posAtaque.position, raioAtaque);
             foreach(Collider2D apanhou in bati)
             {
@@ -64,7 +90,10 @@ public class HollowAttack : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(posAtaque.position, raioAtaque);
+        Gizmos.DrawWireSphere(posAtaque_direita.position, raioAtaque);
+        Gizmos.DrawWireSphere(posAtaque_esquerda.position, raioAtaque);
+        Gizmos.DrawWireSphere(posAtaque_cima.position, raioAtaque);
+        Gizmos.DrawWireSphere(posAtaque_baixo.position, raioAtaque);
     }
 
 }
