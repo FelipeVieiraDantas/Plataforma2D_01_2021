@@ -37,6 +37,13 @@ public class HollowAttack : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.X) || Input.GetMouseButtonDown(0))
         {
+            //Animar o ataque
+            GetComponent<Animator>().SetTrigger("Atacou");
+
+
+
+
+
             //Descobrir qual direção é pra atacar
             Transform posAtaque = posAtaque_direita;
             if(hollowController.ultimaDirHorizontal == Direcao.Esquerda)

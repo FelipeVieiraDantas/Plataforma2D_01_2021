@@ -72,7 +72,12 @@ public class HollowController : MonoBehaviour
             {
                 contadorKnocBack = 0;
                 estouComKnockBack = false;
+                anim.SetBool("Apanhou", false);
             }
+            return;
+        }
+
+        if(scriptDoDano.HP <= 0) {
             return;
         }
 
@@ -86,6 +91,10 @@ public class HollowController : MonoBehaviour
         Collider2D chao = Physics2D.OverlapCircle(posicaoPe.position, 0.01f, layerDoChao);
         if(chao != null)
         {
+            if(estaNoChao == false)
+            {
+                anim.SetTrigger("EncostouNoChão");
+            }
             estaNoChao = true;
             jaPuleiQuantasVezes = 0;
             jaDeuDash = false;
@@ -100,6 +109,7 @@ public class HollowController : MonoBehaviour
             fisica.velocity = Vector2.zero;
             fisica.AddForce(new Vector2(0, forcaPulo));
             jaPuleiQuantasVezes++;
+            anim.SetTrigger("Pulou");
         }
 
 
@@ -138,6 +148,30 @@ public class HollowController : MonoBehaviour
 
         //Colocar o input na animação
         anim.SetFloat("InputVertical", inputVertical);
+        anim.SetFloat("InputHorizontal", Mathf.Abs(inputDoJogador));
+
+        //Flipar sprite
+        SpriteRenderer sprite = GetComponent<SpriteRenderer>();
+        if(inputDoJogador < 0 && !sprite.flipX)
+        {
+            sprite.flipX = true;
+        }else if(inputDoJogador > 0 && sprite.flipX)
+        {
+            sprite.flipX = false;
+        }
+
+        //Verificar se ele está caindo
+        if(fisica.velocity.y < 0)
+        {
+            anim.SetTrigger("Caindo");
+            /*Quem quiser usar um hash ao invés de pegar por string
+             * é mais otimizado. Nesse caso, criaria a variável do hash no Start
+             * E aplicaria da forma abaixo
+             * */
+            /*int caindo = Animator.StringToHash("Caindo");
+            anim.SetTrigger(caindo);*/
+        }
+
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -159,6 +193,8 @@ public class HollowController : MonoBehaviour
 
             fisica.AddForce(forcaAdicionada * forcaKnockBack,ForceMode2D.Impulse);
             estouComKnockBack = true;
+
+            anim.SetBool("Apanhou", true);
         }
     }
 

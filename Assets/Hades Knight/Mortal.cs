@@ -16,6 +16,8 @@ public class Mortal : MonoBehaviour
         if(HP <= 0)
         {
             //MORREU!
+            GetComponent<Animator>().SetTrigger("Morreu");
+            GetComponent<HollowAttack>().enabled = false;
         }
 
         if (mascaraBranca != null)
