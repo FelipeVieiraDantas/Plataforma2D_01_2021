@@ -19,6 +19,10 @@ public class HollowAttack : MonoBehaviour
     [Header("Efeitos")]
     public ParticleSystem efeitoAtaque;
 
+
+    bool atacando;
+    bool deuHit;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -34,60 +38,82 @@ public class HollowAttack : MonoBehaviour
             return;
         }
 
-
-        if(Input.GetKeyDown(KeyCode.X) || Input.GetMouseButtonDown(0))
+        if (atacando)
         {
-            //Animar o ataque
-            GetComponent<Animator>().SetTrigger("Atacou");
-
-
-
-
-
-            //Descobrir qual direção é pra atacar
-            Transform posAtaque = posAtaque_direita;
-            if(hollowController.ultimaDirHorizontal == Direcao.Esquerda)
+            Animator anim = GetComponent<Animator>();
+            if (!anim.GetCurrentAnimatorStateInfo(0).IsTag("Ataque"))
             {
-                posAtaque = posAtaque_esquerda;
+                atacando = false;
             }
-            if(hollowController.ultimaDirVertical != Direcao.Nenhum)
+        }
+
+        if (Input.GetKeyDown(KeyCode.X) || Input.GetMouseButtonDown(0))
+        {
+            if (!atacando)
             {
-                posAtaque = posAtaque_cima;
-                if(hollowController.ultimaDirVertical == Direcao.Baixo)
-                {
-                    posAtaque = posAtaque_baixo;
-                }
+                //Animar o ataque
+                GetComponent<Animator>().SetTrigger("Atacou");
+                atacando = true;
+            }else if (deuHit)
+            {
+                GetComponent<Animator>().SetTrigger("Combo");
+                deuHit = false;
             }
 
+        }
 
-            //Colocar a partícula na posição do ataque
-            efeitoAtaque.transform.position = posAtaque.position;
-            efeitoAtaque.transform.rotation = posAtaque.rotation;
-            //Resetar a partícula se já estiver tocando
-            efeitoAtaque.Clear();
-            //Tocar a partícula
-            efeitoAtaque.Play();
+        
 
-            Collider2D[] bati = Physics2D.OverlapCircleAll(posAtaque.position, raioAtaque);
-            foreach(Collider2D apanhou in bati)
+    }
+
+    public void AtaqueDeFato()
+    {
+        deuHit = true;
+
+
+        //Descobrir qual direção é pra atacar
+        Transform posAtaque = posAtaque_direita;
+        if (hollowController.ultimaDirHorizontal == Direcao.Esquerda)
+        {
+            posAtaque = posAtaque_esquerda;
+        }
+        if (hollowController.ultimaDirVertical != Direcao.Nenhum)
+        {
+            posAtaque = posAtaque_cima;
+            if (hollowController.ultimaDirVertical == Direcao.Baixo)
             {
-                if(apanhou.gameObject != gameObject)
+                posAtaque = posAtaque_baixo;
+            }
+        }
+
+
+        //Colocar a partícula na posição do ataque
+        efeitoAtaque.transform.position = posAtaque.position;
+        efeitoAtaque.transform.rotation = posAtaque.rotation;
+        //Resetar a partícula se já estiver tocando
+        efeitoAtaque.Clear();
+        //Tocar a partícula
+        efeitoAtaque.Play();
+
+        Collider2D[] bati = Physics2D.OverlapCircleAll(posAtaque.position, raioAtaque);
+        foreach (Collider2D apanhou in bati)
+        {
+            if (apanhou.gameObject != gameObject)
+            {
+                Mortal scriptDeDano = apanhou.GetComponent<Mortal>();
+                if (scriptDeDano != null)
                 {
-                    Mortal scriptDeDano = apanhou.GetComponent<Mortal>();
-                    if(scriptDeDano != null)
+                    contadorTempoAtaque = tempoDeAtaque;
+
+                    scriptDeDano.TomarDano(quantidadeDeDano);
+
+                    Rigidbody2D fisicaInimigo = apanhou.GetComponent<Rigidbody2D>();
+                    if (fisicaInimigo != null)
                     {
-                        contadorTempoAtaque = tempoDeAtaque;
-
-                        scriptDeDano.TomarDano(quantidadeDeDano);
-
-                        Rigidbody2D fisicaInimigo = apanhou.GetComponent<Rigidbody2D>();
-                        if(fisicaInimigo != null)
-                        {
-                            Vector2 direcao = apanhou.transform.position - transform.position;
-                            direcao.Normalize();
-                            direcao.y = 1;
-                            fisicaInimigo.AddForce(direcao * forcaKnockbackInimigo, ForceMode2D.Impulse);
-                        }
+                        Vector2 direcao = apanhou.transform.position - transform.position;
+                        direcao.Normalize();
+                        direcao.y = 1;
+                        fisicaInimigo.AddForce(direcao * forcaKnockbackInimigo, ForceMode2D.Impulse);
                     }
                 }
             }
