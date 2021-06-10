@@ -19,6 +19,8 @@ public class HollowAttack : MonoBehaviour
     [Header("Efeitos")]
     public ParticleSystem efeitoAtaque;
 
+    public Animator efeitoPostProcess;
+
 
     bool atacando;
     bool deuHit;
@@ -59,6 +61,8 @@ public class HollowAttack : MonoBehaviour
                 GetComponent<Animator>().SetTrigger("Combo");
                 deuHit = false;
             }
+
+            efeitoPostProcess.SetTrigger("Liga");
 
         }
 
